@@ -22,7 +22,7 @@ export default function PatientDetails({patient}:PatientDetailsProps) {
         <PatientDetailItem label="Nombre" data={patient.name}/>
         <PatientDetailItem label="Propietario" data={patient.caretaker}/>
         <PatientDetailItem label="email" data={patient.email}/>
-        <PatientDetailItem label="Fecha Alta" data={patient.date.toString()}/>
+        <PatientDetailItem label="Fecha Alta" data={patient.date}/>
         <PatientDetailItem label="Síntomas" data={patient.symptoms}/>
 
         <div className="flex justify-between mt-10">

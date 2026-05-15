@@ -1,6 +1,5 @@
 import Error from './Error'
 import {useForm} from 'react-hook-form'
-import {toast} from 'react-toastify'
 import type { DraftPatient } from '../types'
 import { usePatientStore } from '../store'
 import { useEffect } from 'react'
@@ -11,7 +10,18 @@ export default function PatientForm() {
     const activeId = usePatientStore(state => state.activeId)
     const patients = usePatientStore(state => state.patients)
     const updatePatient = usePatientStore(state => state.updatePatient)
-    const {register, handleSubmit, setValue, formState : {errors}, reset} = useForm<DraftPatient>()
+
+    
+     // crear un tipo para el formulario que tenga los mismos campos que DraftPatient pero sin el id
+    type FormData = {
+    name: string
+    caretaker: string
+    email: string
+    date: string
+    symptoms: string
+}
+
+    const {register, handleSubmit, setValue, formState : {errors}} = useForm<FormData>()
 
     useEffect(()=>{
         if(activeId){
@@ -25,18 +35,27 @@ export default function PatientForm() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeId])
 
-    const registerPatient = (data: DraftPatient) => {
-        if(activeId){
-            updatePatient(data)
-            toast.success('Paciente actualizado correctamente.')
-        }else{
-            addPatient(data)
-            toast.success('Paciente registrado correctamente.')
-
+    const registerPatient = (data: FormData) => {
+        const patientData: DraftPatient = {
+            name: data.name,
+            caretaker: data.caretaker,
+            email: data.email,
+            date: data.date,
+            symptoms: data.symptoms
         }
-        // Limpia el formulario cuando se hace el envío
-        reset()
+        
+        if(activeId){
+            updatePatient(patientData)
+        }else{
+            addPatient(patientData)
     }
+    
+    setValue('name', '')
+    setValue('caretaker', '')
+    setValue('email', '')
+    setValue('date', '')
+    setValue('symptoms', '')
+}
 
   return (
     <div className="md:w-1/2 lg:w-2/5 mx-5">
